@@ -1,0 +1,64 @@
+# Entornos virtuales y dependencias
+venv/
+env/
+.venv/
+.env
+.env.local
+.env.*.local
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Archivos generados por el sistema operativo (Windows)
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Archivos de IDE / editores
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Archivos de logs y salidas
+*.log
+*.out
+*.tmp
+
+# Carpetas generadas por los scripts (datos sensibles o no versionables)
+adjuntos_correspondencia/
+correos_pdf/
+extracted_files/
+output/
+data/
+
+# Archivos de configuración con credenciales
+*.credentials
+*.config
+config.json
+secrets.json
+
+# Imágenes y PDFs generados (evitar versionar binarios)
+*.pdf
+*.jpg
+*.jpeg
+*.png
+*.tiff
+*.eml
+
+# Archivos de OCR intermedios
+*.hocr
+*.txt~
+
+# Jupyter / Notebooks (opcional: si no versionas notebooks)
+.ipynb_checkpoints/
+
+# Docker (si decides usarlo en el futuro)
+Dockerfile.dev
+docker-compose.yml
+*.dockerignore
