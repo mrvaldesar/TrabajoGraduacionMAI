@@ -55,10 +55,10 @@ secrets.json
 *.hocr
 *.txt~
 
-# Jupyter / Notebooks (opcional: si no versionas notebooks)
+# Jupyter / Notebooks
 .ipynb_checkpoints/
 
-# Docker (si decides usarlo en el futuro)
+# Docker
 Dockerfile.dev
 docker-compose.yml
 *.dockerignore
