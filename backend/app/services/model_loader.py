@@ -33,8 +33,8 @@ class ModelLoader:
                     # Usaremos el modelo base solo para instanciar la estructura de la clase.
                     base_model_name = "dccuchile/bert-base-spanish-wwm-cased"
                     cls._beto_tokenizer = AutoTokenizer.from_pretrained(base_model_name)
-                    # Usar AutoModelForSequenceClassification con num_labels=3 (ejemplo) si solo cargamos base
-                    cls._beto_model = AutoModelForSequenceClassification.from_pretrained(base_model_name, num_labels=3) # Etiquetas arbitrarias para demo
+                    # Usar AutoModelForSequenceClassification con num_labels=6 (ejemplo) si solo cargamos base
+                    cls._beto_model = AutoModelForSequenceClassification.from_pretrained(base_model_name, num_labels=6) # Etiquetas arbitrarias para demo
             except Exception as e:
                 logger.error(f"Error cargando modelo BETO: {e}")
                 raise e
