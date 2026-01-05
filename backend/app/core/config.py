@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     # Model Paths
     # Default to local folder structure, can be overridden by env vars
     BETO_MODEL_PATH: str = os.getenv("BETO_MODEL_PATH", "models/modelo_beto_finetuned_v1")
-    SBERT_MODEL_PATH: str = os.getenv("SBERT_MODEL_PATH", "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+    SBERT_MODEL_PATH: str = os.getenv("SBERT_MODEL_PATH", "models/modelo_sbert")
 
     # Spacy Model
     SPACY_MODEL: str = "es_core_news_sm"
