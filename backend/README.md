@@ -10,6 +10,7 @@ Este proyecto proporciona una API REST modular construida con **FastAPI** para l
     *   **Similitud**: Utiliza **S-BERT** (Sentence-BERT) para detectar duplicados o similitud semántica.
 *   **Procesamiento de Archivos**: Soporte nativo para extraer texto de **.txt**, **.pdf** y **.docx**.
 *   **Anonimización**: Capa intermedia (middleware/utilidad), que usa una estrategia híbrida para anonimizar antes de ejecutar la inferencia.
+*   **Contenerización**: Docker se incluye para fácil despliegue.
 
 ## Requisitos
 
@@ -85,5 +86,7 @@ Para ejecutar las pruebas de integración:
 pytest tests/test_api.py
 ```
 
-## ToDo
-Contenerizar...
+## Ejecución con Docker
+    ```bash
+    docker build -t image_name:tag .
+    ```
