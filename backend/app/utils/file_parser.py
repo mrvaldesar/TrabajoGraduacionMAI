@@ -1,7 +1,5 @@
 import io
 import magic
-import pdfplumber
-import docx
 
 class FileParser:
     @staticmethod
@@ -13,43 +11,33 @@ class FileParser:
     @staticmethod
     def extract_text(file_content: bytes, filename: str) -> str:
         """
-        Extrae texto de varios formatos de archivo (PDF, DOCX, TXT).
-        Detecta el tipo por mime-type o extensión.
+        Extrae texto de archivos TXT.
+        Valida que el archivo sea texto plano.
         """
-        # Primero intenta detectar por extensión como pista, pero usa mime para validación
         mime_type = FileParser.identify_mime_type(file_content)
 
-        if mime_type == 'application/pdf':
-            return FileParser._read_pdf(file_content)
-        elif mime_type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-            return FileParser._read_docx(file_content)
-        elif mime_type.startswith('text/'):
-            return FileParser._read_txt(file_content)
-        else:
-            # Fallback basado en extensión si la detección mime es ambigua o genérica
-            if filename.lower().endswith('.pdf'):
-                return FileParser._read_pdf(file_content)
-            elif filename.lower().endswith('.docx'):
-                return FileParser._read_docx(file_content)
-            elif filename.lower().endswith('.txt'):
-                return FileParser._read_txt(file_content)
+        # Validamos que sea texto plano
+        # Solo aceptamos si el mime es texto explícito o si la extensión es .txt Y el mime no es binario peligroso
+        # Nota: libmagic a veces dice 'application/octet-stream' para texto ASCII muy corto o raro,
+        # pero 'text/plain' es lo usual. Si el usuario sube un .txt que magic dice que es 'application/zip', debemos rechazarlo.
 
-            raise ValueError(f"Tipo de archivo no soportado: {mime_type} para el archivo {filename}")
+        is_text_mime = mime_type.startswith('text/')
+        is_txt_ext = filename.lower().endswith('.txt')
 
-    @staticmethod
-    def _read_pdf(content: bytes) -> str:
-        text = ""
-        with pdfplumber.open(io.BytesIO(content)) as pdf:
-            for page in pdf.pages:
-                page_text = page.extract_text()
-                if page_text:
-                    text += page_text + "\n"
-        return text.strip()
+        if is_text_mime:
+             return FileParser._read_txt(file_content)
 
-    @staticmethod
-    def _read_docx(content: bytes) -> str:
-        doc = docx.Document(io.BytesIO(content))
-        return "\n".join([para.text for para in doc.paragraphs]).strip()
+        if is_txt_ext and mime_type == 'text/plain':
+             return FileParser._read_txt(file_content)
+
+        # Si tiene extension .txt pero magic dice que NO es texto (ej: application/pdf), se rechaza.
+        # Esto previene que alguien renombre test.pdf a test.txt y lo suba.
+
+        # Caso especial: algunos archivos de texto vacíos o con encoding raro pueden ser identificados como inode/x-empty o similar
+        if (mime_type == 'inode/x-empty' or mime_type == 'application/x-empty') and is_txt_ext:
+             return ""
+
+        raise ValueError(f"Tipo de archivo no soportado: {mime_type} para el archivo {filename}. Solo se permiten archivos de texto (*.txt).")
 
     @staticmethod
     def _read_txt(content: bytes) -> str:

@@ -4,10 +4,8 @@ python-multipart>=0.0.6
 torch>=2.0.0
 transformers>=4.36.0
 sentence-transformers>=2.2.2
-python-docx>=0.8.11
 python-magic>=0.4.27; sys_platform != 'win32'
 python-magic-bin>=0.4.14; sys_platform == 'win32'
-pdfplumber>=0.9.0
 numpy>=1.24.0
 scikit-learn>=1.2.2
 pandas>=2.0.0

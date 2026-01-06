@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 def classify_document(file: UploadFile = File(...)):
     """
     Endpoint para clasificar un documento.
-    1. Lee el archivo (PDF, DOCX, TXT).
+    1. Lee el archivo (solo TXT).
     2. Anonimiza el contenido.
     3. Pasa el texto anonimizado al modelo BETO.
     """

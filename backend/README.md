@@ -8,7 +8,7 @@ Este proyecto proporciona una API REST modular construida con **FastAPI** para l
 *   **Modelos**:
     *   **Clasificación**: Utiliza **BETO fine-tunned** (BERT para español) para categorizar documentos.
     *   **Similitud**: Utiliza **S-BERT** (Sentence-BERT) para detectar duplicados o similitud semántica.
-*   **Procesamiento de Archivos**: Soporte nativo para extraer texto de **.txt**, **.pdf** y **.docx**.
+*   **Procesamiento de Archivos**: Soporte nativo para extraer texto de archivos **.txt**.
 *   **Anonimización**: Capa intermedia (middleware/utilidad), que usa una estrategia híbrida para anonimizar antes de ejecutar la inferencia.
 *   **Contenerización**: Docker se incluye para fácil despliegue.
 
@@ -48,7 +48,7 @@ Este proyecto proporciona una API REST modular construida con **FastAPI** para l
 
 ## Documentación de la API
 
-Una vez iniciado el servidor, puedes acceder a la documentación interactiva (Swagger UI) en:
+Una vez iniciado el servidor, es posible acceder a la documentación interactiva (Swagger UI) en:
 *   **URL**: `http://localhost:8000/docs`
 
 ### Endpoints Principales
@@ -56,7 +56,7 @@ Una vez iniciado el servidor, puedes acceder a la documentación interactiva (Sw
 #### 1. POST `/api/v1/classify`
 Recibe un archivo y devuelve su categoría predicha.
 
-*   **Input**: `file` (UploadFile - PDF, DOCX, TXT)
+*   **Input**: `file` (UploadFile - solo TXT)
 *   **Output JSON**:
     ```json
     {
