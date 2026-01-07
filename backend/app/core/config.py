@@ -7,8 +7,18 @@ class Settings(BaseSettings):
 
     # Model Paths
     # Default to local folder structure, can be overridden by env vars
-    BETO_MODEL_PATH: str = os.getenv("BETO_MODEL_PATH", "models/modelo_beto_finetuned_v1")
-    SBERT_MODEL_PATH: str = os.getenv("SBERT_MODEL_PATH", "models/modelo_sbert")
+
+    # Modelo BETO para Clasificación de Documentos (Fine-tuned)
+    BETO_MODEL_PATH: str = os.getenv("BETO_CLS_PATH", "models/beto_finetuned")
+
+    # Modelo Sentence-BERT para Similitud Semántica
+    SBERT_MODEL_PATH: str = os.getenv("SBERT_PATH", "models/sbert")
+
+    # Modelo BETO para Reconocimiento de Entidades Nombradas (NER) - Ruta local
+    BETO_NER_PATH: str = os.getenv("BETO_NER_PATH", "model_cache")
+
+    # ID del modelo NER en Hugging Face (para descarga automática)
+    BETO_NER_HF_ID: str = os.getenv("BETO_NER_HF_ID", "mrm8488/bert-spanish-cased-finetuned-ner")
 
     class Config:
         case_sensitive = True

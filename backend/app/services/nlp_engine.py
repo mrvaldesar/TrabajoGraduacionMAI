@@ -24,7 +24,7 @@ class NLPEngine:
         Clasifica el texto usando el modelo BETO.
         Devuelve la categoría (str) y la confianza (float).
         """
-        tokenizer, model = ModelLoader.get_beto_model()
+        tokenizer, model = ModelLoader.get_beto_cls()
 
         # Tokenización
         inputs = tokenizer(text, return_tensors="pt", truncation=True, padding=True, max_length=512)
@@ -66,7 +66,7 @@ class NLPEngine:
         Calcula la similitud semántica entre dos textos usando S-BERT.
         Devuelve un puntaje flotante entre 0 y 1.
         """
-        model = ModelLoader.get_sbert_model()
+        model = ModelLoader.get_sbert()
 
         # Calcular embeddings
         embeddings1 = model.encode(text1, convert_to_tensor=True)

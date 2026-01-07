@@ -1,15 +1,12 @@
 import re
 import torch
-from transformers import pipeline, AutoTokenizer
-from app.core.config import settings
+from transformers import pipeline
+from app.services.model_loader import ModelLoader
 
 class Anonymizer:
     _pipeline = None
     _tokenizer = None
     
-    # Configuración del modelo (puedes mover esto a settings si prefieres)
-    MODEL_NAME = "mrm8488/bert-spanish-cased-finetuned-ner"
-
     # Lista de entidades sensibles conocidas (Gazetteer)
     KNOWN_ENTITIES = {
         "PER": [
@@ -36,18 +33,20 @@ class Anonymizer:
         Carga el modelo y el tokenizer en memoria si no existen (Singleton).
         """
         if cls._pipeline is None or cls._tokenizer is None:
-            print(f"Cargando modelo NER ({cls.MODEL_NAME})...")
+            print(f"Cargando modelo NER...")
             device = 0 if torch.cuda.is_available() else -1
             
             try:
+                # Usar ModelLoader para gestionar carga local vs descarga
+                tokenizer, model = ModelLoader.get_beto_ner()
                 cls._pipeline = pipeline(
                     "ner",
-                    model=cls.MODEL_NAME,
-                    tokenizer=cls.MODEL_NAME,
+                    model=model,
+                    tokenizer=tokenizer,
                     aggregation_strategy="simple",
                     device=device
                 )
-                cls._tokenizer = AutoTokenizer.from_pretrained(cls.MODEL_NAME)
+                cls._tokenizer = tokenizer
                 print("✅ Modelo y tokenizer cargados correctamente.")
             except Exception as e:
                 print(f"Error cargando el modelo: {e}")
