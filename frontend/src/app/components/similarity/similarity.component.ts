@@ -5,27 +5,33 @@ import { FileConversionService } from '../../services/file-conversion.service';
 @Component({
   selector: 'app-similarity',
   template: `
-    <div class="card">
-      <div class="card-header bg-success text-white">
-        Similitud Semántica
+    <div class="sap-window">
+      <div class="sap-window-header">
+        <span>Similitud Semántica</span>
       </div>
-      <div class="card-body">
-        <p class="card-text">Compara dos documentos (PDF, DOCX, TXT, JPG, PNG) para verificar si son semánticamente similares o duplicados.</p>
+      <div class="sap-window-body">
+        <p style="margin-bottom: 20px; color: #555;">Compara dos documentos (PDF, DOCX, TXT, JPG, PNG) para verificar si son semánticamente similares o duplicados.</p>
 
         <div class="row">
           <div class="col-md-6 mb-3">
-            <label class="form-label">Archivo 1</label>
-            <input class="form-control" type="file" (change)="onFile1Selected($event)">
+             <div class="sap-form-row">
+                <label class="sap-label">Archivo 1</label>
+                <input class="sap-input" type="file" (change)="onFile1Selected($event)">
+             </div>
           </div>
           <div class="col-md-6 mb-3">
-            <label class="form-label">Archivo 2</label>
-            <input class="form-control" type="file" (change)="onFile2Selected($event)">
+             <div class="sap-form-row">
+                <label class="sap-label">Archivo 2</label>
+                <input class="sap-input" type="file" (change)="onFile2Selected($event)">
+             </div>
           </div>
         </div>
 
-        <button class="btn btn-success" (click)="compare()" [disabled]="!file1 || !file2 || loading">
-           {{ loading ? 'Procesando...' : 'Calcular Similitud' }}
-        </button>
+        <div class="sap-form-row">
+             <button class="sap-btn sap-btn-primary" (click)="compare()" [disabled]="!file1 || !file2 || loading">
+                {{ loading ? 'Procesando...' : 'Calcular Similitud' }}
+             </button>
+        </div>
 
         <div *ngIf="loading" class="mt-3">
             <p class="mb-1">{{ statusMessage }}</p>
@@ -40,13 +46,13 @@ import { FileConversionService } from '../../services/file-conversion.service';
           {{ error }}
         </div>
 
-        <div *ngIf="result" class="alert mt-3" [ngClass]="result.is_duplicate ? 'alert-warning' : 'alert-info'">
-          <h4 class="alert-heading">Resultado:</h4>
-          <p><strong>Puntaje de Similitud:</strong> {{ result.similarity | number:'1.4-4' }}</p>
-          <p>
+        <div *ngIf="result" class="alert mt-3" [ngClass]="result.is_duplicate ? 'alert-warning' : 'alert-info'" style="border: 1px solid #999;">
+          <h4 class="alert-heading" style="font-size: 14px; font-weight: bold;">Resultado:</h4>
+          <p class="mb-1"><strong>Puntaje de Similitud:</strong> {{ result.similarity | number:'1.4-4' }}</p>
+          <p class="mb-0">
             <strong>Estado:</strong>
-            <span *ngIf="result.is_duplicate" class="badge bg-danger">Posible Duplicado</span>
-            <span *ngIf="!result.is_duplicate" class="badge bg-success">Diferentes</span>
+            <span *ngIf="result.is_duplicate" class="badge bg-danger ms-2">Posible Duplicado</span>
+            <span *ngIf="!result.is_duplicate" class="badge bg-success ms-2">Diferentes</span>
           </p>
         </div>
       </div>

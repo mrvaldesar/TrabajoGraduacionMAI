@@ -5,21 +5,24 @@ import { FileConversionService } from '../../services/file-conversion.service';
 @Component({
   selector: 'app-classify',
   template: `
-    <div class="card">
-      <div class="card-header bg-primary text-white">
-        Clasificación de Documentos
+    <div class="sap-window">
+      <div class="sap-window-header">
+        <span>Clasificación de Documentos</span>
       </div>
-      <div class="card-body">
-        <p class="card-text">Sube un documento (PDF, DOCX, TXT, JPG, PNG) para que el modelo BETO identifique su categoría.</p>
+      <div class="sap-window-body">
+        <p style="margin-bottom: 20px; color: #555;">Sube un documento (PDF, DOCX, TXT, JPG, PNG) para que el modelo BETO identifique su categoría.</p>
 
-        <div class="mb-3">
-          <label for="fileInput" class="form-label">Seleccionar archivo</label>
-          <input class="form-control" type="file" id="fileInput" (change)="onFileSelected($event)">
+        <div class="sap-form-row">
+          <label for="fileInput" class="sap-label">Seleccionar archivo</label>
+          <input class="sap-input" type="file" id="fileInput" (change)="onFileSelected($event)">
         </div>
 
-        <button class="btn btn-primary" (click)="upload()" [disabled]="!selectedFile || loading">
-          {{ loading ? 'Procesando...' : 'Clasificar' }}
-        </button>
+        <div class="sap-form-row">
+            <div class="sap-label"></div> <!-- Spacer for alignment -->
+            <button class="sap-btn sap-btn-primary" (click)="upload()" [disabled]="!selectedFile || loading">
+              {{ loading ? 'Procesando...' : 'Clasificar' }}
+            </button>
+        </div>
 
         <div *ngIf="loading" class="mt-3">
             <p class="mb-1">{{ statusMessage }}</p>
@@ -34,10 +37,10 @@ import { FileConversionService } from '../../services/file-conversion.service';
           {{ error }}
         </div>
 
-        <div *ngIf="result" class="alert alert-success mt-3">
-          <h4 class="alert-heading">Resultado:</h4>
-          <p><strong>Categoría:</strong> {{ result.category }}</p>
-          <p><strong>Confianza:</strong> {{ (result.confidence * 100) | number:'1.2-2' }}%</p>
+        <div *ngIf="result" class="alert alert-success mt-3" style="border: 1px solid #999; background: #e0ffd4; color: #000;">
+          <h4 class="alert-heading" style="font-size: 14px; font-weight: bold;">Resultado:</h4>
+          <p class="mb-1"><strong>Categoría:</strong> {{ result.category }}</p>
+          <p class="mb-0"><strong>Confianza:</strong> {{ (result.confidence * 100) | number:'1.2-2' }}%</p>
         </div>
       </div>
     </div>

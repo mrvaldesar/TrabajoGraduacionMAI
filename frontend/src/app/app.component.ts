@@ -3,29 +3,36 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-root',
   template: `
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="container">
-        <a class="navbar-brand" href="#">NLP API Service</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link" routerLink="/classify" routerLinkActive="active">Clasificación</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLink="/similarity" routerLinkActive="active">Similitud</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLink="/history" routerLinkActive="active">Historial</a>
-            </li>
-          </ul>
+    <div class="sap-wrapper">
+      <!-- Top Header -->
+      <div class="sap-header">
+        <span style="margin-right: 10px;">🔷</span>
+        <span>SAP Business One | NLP Extension</span>
+      </div>
+
+      <div class="sap-container">
+        <!-- Side Navigation (Modules) -->
+        <nav class="sap-sidebar">
+          <div style="padding: 10px; font-weight: bold; color: #555; text-transform: uppercase; font-size: 11px;">Módulos</div>
+
+          <a class="sap-menu-item" routerLink="/classify" routerLinkActive="active">
+            <i class="bi bi-file-earmark-text me-2"></i> Clasificación
+          </a>
+
+          <a class="sap-menu-item" routerLink="/similarity" routerLinkActive="active">
+             <i class="bi bi-files me-2"></i> Similitud
+          </a>
+
+          <a class="sap-menu-item" routerLink="/history" routerLinkActive="active">
+             <i class="bi bi-clock-history me-2"></i> Historial
+          </a>
+        </nav>
+
+        <!-- Main Content Area -->
+        <div class="sap-main">
+          <router-outlet></router-outlet>
         </div>
       </div>
-    </nav>
-    <div class="container mt-4">
-      <router-outlet></router-outlet>
     </div>
   `,
   styles: []
