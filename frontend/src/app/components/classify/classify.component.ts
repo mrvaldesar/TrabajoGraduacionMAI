@@ -10,7 +10,7 @@ import { FileConversionService } from '../../services/file-conversion.service';
         Clasificación de Documentos
       </div>
       <div class="card-body">
-        <p class="card-text">Sube un documento (PDF, DOCX, TXT) para que el modelo BETO identifique su categoría.</p>
+        <p class="card-text">Sube un documento (PDF, DOCX, TXT, JPG, PNG) para que el modelo BETO identifique su categoría.</p>
 
         <div class="mb-3">
           <label for="fileInput" class="form-label">Seleccionar archivo</label>
@@ -70,14 +70,20 @@ export class ClassifyComponent {
     this.loading = true;
     this.error = null;
     this.result = null;
-    this.progress = 10;
+    this.progress = 5;
     this.statusMessage = 'Iniciando proceso...';
 
     try {
-      this.statusMessage = 'Extrayendo texto del archivo...';
-      this.progress = 30;
+      this.statusMessage = 'Preparando archivo...';
 
-      const textFile = await this.fileConversion.convertToTxtFile(this.selectedFile);
+      // Callback to update progress from the service
+      const onProgress = (status: string, percentage: number) => {
+        this.statusMessage = status;
+        // Map 0-100 from service to 0-60 in overall progress (leaving 40% for API call)
+        this.progress = Math.floor(percentage * 0.6);
+      };
+
+      const textFile = await this.fileConversion.convertToTxtFile(this.selectedFile, onProgress);
 
       this.statusMessage = 'Enviando a modelo BETO...';
       this.progress = 60;

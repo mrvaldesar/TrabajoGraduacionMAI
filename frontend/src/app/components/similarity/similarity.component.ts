@@ -10,7 +10,7 @@ import { FileConversionService } from '../../services/file-conversion.service';
         Similitud Semántica
       </div>
       <div class="card-body">
-        <p class="card-text">Compara dos documentos para verificar si son semánticamente similares o duplicados.</p>
+        <p class="card-text">Compara dos documentos (PDF, DOCX, TXT, JPG, PNG) para verificar si son semánticamente similares o duplicados.</p>
 
         <div class="row">
           <div class="col-md-6 mb-3">
@@ -82,17 +82,25 @@ export class SimilarityComponent {
     try {
         // Convert File 1
         this.statusMessage = `Procesando archivo 1 (${this.file1.name})...`;
-        this.progress = 20;
-        const textFile1 = await this.fileConversion.convertToTxtFile(this.file1);
+        const onProgress1 = (status: string, percentage: number) => {
+            this.statusMessage = `Archivo 1: ${status}`;
+            // 0-40% total
+            this.progress = Math.floor(percentage * 0.4);
+        };
+        const textFile1 = await this.fileConversion.convertToTxtFile(this.file1, onProgress1);
 
         // Convert File 2
         this.statusMessage = `Procesando archivo 2 (${this.file2.name})...`;
-        this.progress = 50;
-        const textFile2 = await this.fileConversion.convertToTxtFile(this.file2);
+        const onProgress2 = (status: string, percentage: number) => {
+            this.statusMessage = `Archivo 2: ${status}`;
+            // 40-80% total
+            this.progress = 40 + Math.floor(percentage * 0.4);
+        };
+        const textFile2 = await this.fileConversion.convertToTxtFile(this.file2, onProgress2);
 
         // Send to API
         this.statusMessage = 'Comparando documentos...';
-        this.progress = 80;
+        this.progress = 85;
 
         this.api.similarity(textFile1, textFile2).subscribe({
           next: (res) => {
