@@ -34,8 +34,8 @@ Este proyecto proporciona una API REST modular construida con **FastAPI** para l
 
 3.  **Configuración de Modelos (Opcional)**:
     El sistema busca modelos locales en las rutas definidas en `app/core/config.py`.
-    *   `BETO_MODEL_PATH`: Por defecto `models/modelo_beto_finetuned_v1`, sino se usará `dccuchile/bert-base-spanish-wwm-cased`.
-    *   `SBERT_MODEL_PATH`: Por defecto `models/modelo_sbert`.
+    *   `BETO_MODEL_PATH`: Por defecto `models/beto_finetuned`, sino se usará `dccuchile/bert-base-spanish-wwm-cased`.
+    *   `SBERT_MODEL_PATH`: Por defecto `models/sbert`.
 
     *Nota: Si no encuentra el modelo BETO local, el sistema descargará un modelo base de HuggingFace para permitir la demostración, aunque la clasificación no será precisa sin el fine-tuning.*
 

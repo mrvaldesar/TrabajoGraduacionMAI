@@ -7,22 +7,26 @@ El proyecto busca **cerrar la brecha entre los avances académicos en Procesamie
 > 📌 **Nota**: Este repositorio incluye únicamente los componentes de preparación y procesamiento de datos. La API REST, el frontend y los modelos entrenados se gestionan en fases posteriores del desarrollo.
 
 ## Estructura del repositorio
+```text
 ├── notebook/
-│ └── corpus archivos pln.txt # Lista de nombres/archivos del corpus empresarial (sin contenido sensible)
+│ ├── 0_eda.ipynb # Análisis exploratorio realizado
+│ └── pln_clasificacion_duplicados_empresariales.ipynb # Anonimización de archivos y finetunning de modelos
 │
 ├── scripts/
-│ ├── descargar_adjuntos.py # Descarga archivos adjuntos de correos corporativos (.eml)
-│ ├── correos_a_pdf.py # Convierte correos .eml a PDF para estandarización
-│ └── ftp_ocr_extractor.py # Extrae texto de documentos mediante OCR (para PDFs escaneados o imágenes)
+│ ├── descargar_adjuntos.py # Descarga archivos adjuntos de correos corporativos
+│ ├── correos_a_pdf.py # Busca, descarga y convierte correos a PDF
+│ ├── ftp_ocr_extractor.py # Extrae texto de documentos mediante OCR (para PDFs escaneados o imágenes)
+│ ├── adjuntos_correspondencia/ # (Generada) Carpeta para adjuntos descargados
+│ ├── correos_pdf/ # (Generada) Correos convertidos a PDF
+│ └── extracted_files/ # (Generada) Texto plano extraído (listo para PLN)
 │
-├── adjuntos_correspondencia/ # (Generada) Carpeta para adjuntos descargados
-├── correos_pdf/ # (Generada) Correos convertidos a PDF
-└── extracted_files/ # (Generada) Texto plano extraído (listo para PLN)
+├── backend   # API REST con FastAPI, Modelos NLP (BETO, S-BERT) y lógica de negocio.
+└── frontend  # Aplicación de prueba, Web Angular para interactuar con los endpoints.
 
 
 ## Objetivo
 
-Preparar un corpus documental realista y anonimizado, compuesto por **886 documentos empresariales** de una empresa guatemalteca del sector de telecomunicaciones, distribuidos en 6 categorías:
+Preparar un corpus documental realista y anonimizado, compuesto por **906 documentos empresariales** de una empresa guatemalteca del sector de telecomunicaciones, distribuidos en 6 categorías:
 - Contratos
 - Correos electrónicos
 - Correspondencia administrativa
@@ -58,13 +62,12 @@ Estos datos servirán como base para:
    python scripts/ftp_ocr_extractor.py
    ```
 3. Los documentos procesados se guardarán en las carpetas correspondientes (correos_pdf/, extracted_files/, etc.), listos para su uso en el pipeline de PLN.
+4. En la carpeta backend y frontend están las instrucciones correspondientes (README.md)
 
 ## Próximos pasos
-- Entrenamiento y fine-tuning de BETO para clasificación en 6 categorías
-- Integración de Sentence-BERT multilingüe para detección de similitud semántica
-- Despliegue de API REST con FastAPI
-- Evaluación cuantitativa (F1-score, matriz de confusión) vs. TF-IDF
-- Validación cualitativa con usuarios administrativos reales
+- Mejorar manejo de volumenes docker para evitar descargar constantemente los modelos
+- Preparar frontend
+- Contenerizar y aplicar docker-compose.yml
 
 ## Licencia
 Este proyecto tiene fines académicos y de investigación. El código está disponible bajo la licencia MIT.
