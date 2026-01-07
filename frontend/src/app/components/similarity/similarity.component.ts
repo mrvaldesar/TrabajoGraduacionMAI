@@ -1,0 +1,131 @@
+import { Component } from '@angular/core';
+import { ApiService, SimilarityResponse } from '../../services/api.service';
+import { FileConversionService } from '../../services/file-conversion.service';
+
+@Component({
+  selector: 'app-similarity',
+  template: `
+    <div class="card">
+      <div class="card-header bg-success text-white">
+        Similitud Semántica
+      </div>
+      <div class="card-body">
+        <p class="card-text">Compara dos documentos para verificar si son semánticamente similares o duplicados.</p>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Archivo 1</label>
+            <input class="form-control" type="file" (change)="onFile1Selected($event)">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Archivo 2</label>
+            <input class="form-control" type="file" (change)="onFile2Selected($event)">
+          </div>
+        </div>
+
+        <button class="btn btn-success" (click)="compare()" [disabled]="!file1 || !file2 || loading">
+           {{ loading ? 'Procesando...' : 'Calcular Similitud' }}
+        </button>
+
+        <div *ngIf="loading" class="mt-3">
+            <p class="mb-1">{{ statusMessage }}</p>
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" [style.width.%]="progress" [attr.aria-valuenow]="progress" aria-valuemin="0" aria-valuemax="100">
+                    {{ progress }}%
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="error" class="alert alert-danger mt-3">
+          {{ error }}
+        </div>
+
+        <div *ngIf="result" class="alert mt-3" [ngClass]="result.is_duplicate ? 'alert-warning' : 'alert-info'">
+          <h4 class="alert-heading">Resultado:</h4>
+          <p><strong>Puntaje de Similitud:</strong> {{ result.similarity | number:'1.4-4' }}</p>
+          <p>
+            <strong>Estado:</strong>
+            <span *ngIf="result.is_duplicate" class="badge bg-danger">Posible Duplicado</span>
+            <span *ngIf="!result.is_duplicate" class="badge bg-success">Diferentes</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  `
+})
+export class SimilarityComponent {
+  file1: File | null = null;
+  file2: File | null = null;
+  result: SimilarityResponse | null = null;
+  error: string | null = null;
+  loading = false;
+  progress = 0;
+  statusMessage = '';
+
+  constructor(
+    private api: ApiService,
+    private fileConversion: FileConversionService
+  ) {}
+
+  onFile1Selected(event: any) { this.file1 = event.target.files[0]; this.result = null; }
+  onFile2Selected(event: any) { this.file2 = event.target.files[0]; this.result = null; }
+
+  async compare() {
+    if (!this.file1 || !this.file2) return;
+
+    this.loading = true;
+    this.error = null;
+    this.result = null;
+    this.progress = 0;
+    this.statusMessage = 'Iniciando...';
+
+    try {
+        // Convert File 1
+        this.statusMessage = `Procesando archivo 1 (${this.file1.name})...`;
+        this.progress = 20;
+        const textFile1 = await this.fileConversion.convertToTxtFile(this.file1);
+
+        // Convert File 2
+        this.statusMessage = `Procesando archivo 2 (${this.file2.name})...`;
+        this.progress = 50;
+        const textFile2 = await this.fileConversion.convertToTxtFile(this.file2);
+
+        // Send to API
+        this.statusMessage = 'Comparando documentos...';
+        this.progress = 80;
+
+        this.api.similarity(textFile1, textFile2).subscribe({
+          next: (res) => {
+            this.progress = 100;
+            this.statusMessage = 'Completado';
+            setTimeout(() => {
+                this.loading = false;
+                this.result = res;
+                this.addToHistory({
+                    type: 'Similitud',
+                    file: `${this.file1?.name} vs ${this.file2?.name}`,
+                    result: `Score: ${res.similarity.toFixed(4)}`,
+                    timestamp: new Date()
+                });
+            }, 500);
+          },
+          error: (err) => {
+            this.error = 'Error al comparar archivos. Verifica el servidor.';
+            console.error(err);
+            this.loading = false;
+          }
+        });
+
+    } catch (error) {
+        this.error = 'Error al convertir los archivos a texto.';
+        console.error(error);
+        this.loading = false;
+    }
+  }
+
+  addToHistory(item: any) {
+      const history = JSON.parse(localStorage.getItem('nlp_history') || '[]');
+      history.unshift(item);
+      localStorage.setItem('nlp_history', JSON.stringify(history));
+  }
+}
