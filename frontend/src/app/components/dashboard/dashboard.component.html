@@ -19,6 +19,36 @@
 
 <div class="sap-content-container">
 
+    <!-- KPI Cards: Average Inference Time -->
+    <div class="row mb-4">
+        <div class="col-12 col-md-6 mb-3 mb-md-0">
+            <div class="card sap-card h-100">
+                <div class="card-body d-flex align-items-center">
+                    <div class="rounded-circle p-3 me-3" style="background-color: rgba(172, 146, 236, 0.2); color: #ac92ec;">
+                        <i class="bi bi-hourglass-split fs-3"></i>
+                    </div>
+                    <div>
+                        <h6 class="text-muted mb-1">Tiempo Promedio Inferencia (Clasificación)</h6>
+                        <h3 class="mb-0">{{ avgClassifyTime | number:'1.4-4' }} s</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="card sap-card h-100">
+                <div class="card-body d-flex align-items-center">
+                    <div class="rounded-circle p-3 me-3" style="background-color: rgba(252, 110, 81, 0.2); color: #fc6e51;">
+                        <i class="bi bi-hourglass-split fs-3"></i>
+                    </div>
+                    <div>
+                        <h6 class="text-muted mb-1">Tiempo Promedio Inferencia (Similitud)</h6>
+                        <h3 class="mb-0">{{ avgSimilarityTime | number:'1.4-4' }} s</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <!-- Pie Chart: Categorias -->
         <div class="col-12 col-lg-6 mb-4">
@@ -52,6 +82,18 @@
                 </div>
                 <div class="card-body" style="height: 300px; position: relative;">
                      <canvas #lineChart></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Line Chart: Latency Evolution -->
+        <div class="col-12 mb-4">
+            <div class="card sap-card h-100">
+                <div class="card-header sap-card-header">
+                    <span class="fw-bold">Evolución de Tiempos de Inferencia (Promedio Diario)</span>
+                </div>
+                <div class="card-body" style="height: 300px; position: relative;">
+                     <canvas #latencyChart></canvas>
                 </div>
             </div>
         </div>

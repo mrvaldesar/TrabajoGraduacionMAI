@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
       <!-- Top Header -->
       <div class="sap-header">
         <span style="margin-right: 10px;">🔷</span>
-        <span>SAP Business One | NLP Extension</span>
+        <span>Sistema NLP Corporativo | Prototipo de Investigación</span>
       </div>
 
       <div class="sap-container">

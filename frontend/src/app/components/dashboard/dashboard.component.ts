@@ -10,13 +10,19 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('pieChart') pieCanvas!: ElementRef<HTMLCanvasElement>;
   @ViewChild('barChart') barCanvas!: ElementRef<HTMLCanvasElement>;
   @ViewChild('lineChart') lineCanvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('latencyChart') latencyCanvas!: ElementRef<HTMLCanvasElement>;
 
   private pieChart: Chart | undefined;
   private barChart: Chart | undefined;
   private lineChart: Chart | undefined;
+  private latencyChart: Chart | undefined;
 
   totalOperations = 0;
   lastUpdate: Date = new Date();
+
+  // New KPIs
+  avgClassifyTime = 0;
+  avgSimilarityTime = 0;
 
   constructor() {
     Chart.register(...registerables);
@@ -34,6 +40,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.pieChart?.destroy();
     this.barChart?.destroy();
     this.lineChart?.destroy();
+    this.latencyChart?.destroy();
   }
 
   renderCharts() {
@@ -42,6 +49,24 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.totalOperations = history.length;
     this.lastUpdate = new Date();
+
+    // --- KPI CALCULATIONS ---
+    const classifyItems = history.filter(h => h.type === 'Clasificación' && h.metrics && h.metrics.inference_time);
+    const similarityItems = history.filter(h => h.type === 'Similitud' && h.metrics && h.metrics.inference_time);
+
+    if (classifyItems.length > 0) {
+      const totalTime = classifyItems.reduce((acc, curr) => acc + curr.metrics.inference_time, 0);
+      this.avgClassifyTime = totalTime / classifyItems.length;
+    } else {
+      this.avgClassifyTime = 0;
+    }
+
+    if (similarityItems.length > 0) {
+      const totalTime = similarityItems.reduce((acc, curr) => acc + curr.metrics.inference_time, 0);
+      this.avgSimilarityTime = totalTime / similarityItems.length;
+    } else {
+      this.avgSimilarityTime = 0;
+    }
 
     // 1. Process Classification Data (Pie Chart)
     const categoryCounts: { [key: string]: number } = {};
@@ -72,25 +97,54 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // 3. Process Activity Data (Line Chart - Last 7 Days)
     const activityMap: { [key: string]: number } = {};
-    // Init last 7 days with 0
+    // 4. Process Latency Evolution Data (Line Chart - Last 7 Days)
+    const latencyClassifyMap: { [key: string]: { total: number, count: number } } = {};
+    const latencySimilarityMap: { [key: string]: { total: number, count: number } } = {};
+
+    // Init last 7 days
     for(let i=6; i>=0; i--) {
         const d = new Date();
         d.setDate(d.getDate() - i);
         const dateStr = d.toISOString().split('T')[0]; // YYYY-MM-DD
         activityMap[dateStr] = 0;
+        latencyClassifyMap[dateStr] = { total: 0, count: 0 };
+        latencySimilarityMap[dateStr] = { total: 0, count: 0 };
     }
 
     history.forEach(h => {
         if(h.timestamp) {
             const dateStr = new Date(h.timestamp).toISOString().split('T')[0];
+
+            // Activity Count
             if(activityMap.hasOwnProperty(dateStr)) {
                 activityMap[dateStr]++;
+            }
+
+            // Latency Accumulation
+            if (h.metrics && h.metrics.inference_time) {
+                if (h.type === 'Clasificación' && latencyClassifyMap.hasOwnProperty(dateStr)) {
+                    latencyClassifyMap[dateStr].total += h.metrics.inference_time;
+                    latencyClassifyMap[dateStr].count++;
+                } else if (h.type === 'Similitud' && latencySimilarityMap.hasOwnProperty(dateStr)) {
+                    latencySimilarityMap[dateStr].total += h.metrics.inference_time;
+                    latencySimilarityMap[dateStr].count++;
+                }
             }
         }
     });
 
-    const lineLabels = Object.keys(activityMap); // Already sorted by date construction
+    const lineLabels = Object.keys(activityMap); // Sorted
     const lineData = Object.values(activityMap);
+
+    // Calculate daily averages for latency
+    const latencyClassifyData = lineLabels.map(date => {
+        const item = latencyClassifyMap[date];
+        return item.count > 0 ? item.total / item.count : 0;
+    });
+    const latencySimilarityData = lineLabels.map(date => {
+        const item = latencySimilarityMap[date];
+        return item.count > 0 ? item.total / item.count : 0;
+    });
 
 
     // --- RENDER PIE ---
@@ -100,7 +154,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         data: {
           labels: pieLabels.length ? pieLabels : ['Sin Datos'],
           datasets: [{
-            data: pieData.length ? pieData : [1], // Dummy data if empty
+            data: pieData.length ? pieData : [1],
             backgroundColor: [
               '#5d9cec', '#4fc1e9', '#48cfad', '#a0d468', '#ffce54', '#fc6e51', '#ed5565', '#ac92ec', '#ec87c0'
             ],
@@ -141,7 +195,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       });
     }
 
-    // --- RENDER LINE ---
+    // --- RENDER LINE (Activity) ---
     if (this.lineCanvas) {
       this.lineChart = new Chart(this.lineCanvas.nativeElement, {
         type: 'line',
@@ -165,12 +219,67 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       });
     }
+
+    // --- RENDER LINE (Latency Evolution) ---
+    if (this.latencyCanvas) {
+        this.latencyChart = new Chart(this.latencyCanvas.nativeElement, {
+            type: 'line',
+            data: {
+                labels: lineLabels,
+                datasets: [
+                    {
+                        label: 'Inferencia Clasificación (s)',
+                        data: latencyClassifyData,
+                        borderColor: '#ac92ec',
+                        backgroundColor: 'rgba(172, 146, 236, 0.2)',
+                        tension: 0.3,
+                        fill: false
+                    },
+                    {
+                        label: 'Inferencia Similitud (s)',
+                        data: latencySimilarityData,
+                        borderColor: '#fc6e51',
+                        backgroundColor: 'rgba(252, 110, 81, 0.2)',
+                        tension: 0.3,
+                        fill: false
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'Segundos' }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: (context) => {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += context.parsed.y.toFixed(4) + ' s';
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
   }
 
   refresh() {
       this.pieChart?.destroy();
       this.barChart?.destroy();
       this.lineChart?.destroy();
+      this.latencyChart?.destroy();
       this.renderCharts();
   }
 }

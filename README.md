@@ -90,8 +90,7 @@ Estos datos servirán como base para:
 4. En la carpeta backend y frontend están las instrucciones correspondientes (README.md)
 
 ## Próximos pasos
-- Mejorar apariencia de interfaz gráfica (demo)
-- Contenerizar y aplicar docker-compose.yml
+- Trabajar en los scripts y notebooks para la Evaluación de los casos de pruebas.
 
 ## Licencia
 Este proyecto tiene fines académicos y de investigación. El código está disponible bajo la licencia MIT.
