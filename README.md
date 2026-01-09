@@ -22,6 +22,32 @@ El proyecto busca **cerrar la brecha entre los avances académicos en Procesamie
 ├── backend   # API REST con FastAPI, Modelos NLP (BETO, S-BERT) y lógica de negocio.
 └── frontend  # Aplicación de prueba, Web Angular para interactuar con los endpoints.
 ```
+### Diagrama de Arquitectura (ASCII)
+
+```text
++---------+
+| Usuario |
++----+----+
+     |
+     | HTTP / Web
+     v
++-------------------------------------------------------+
+|                     DOCKER HOST                       |
+|                                                       |
+|   +-----------------------+                           |
+|   |   Frontend Service    |                           |
+|   | (Angular + Nginx)     |                           |
+|   +-----------+-----------+                           |
+|               |                                       |
+|               | API Requests (JSON)                   |
+|               v                                       |
+|   +-----------------------+       +---------------+   |
+|   |   Backend Service     |<----->| Volúmenes     |   |
+|   | (FastAPI + PyTorch)   |       | (Modelos ML)  |   |
+|   +-----------------------+       +---------------+   |
+|                                                       |
++-------------------------------------------------------+
+```
 
 ## Objetivo
 

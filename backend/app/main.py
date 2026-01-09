@@ -29,10 +29,18 @@ def create_app() -> FastAPI:
     @app.on_event("startup")
     async def startup_event():
         logger.info("Iniciando API...")
-        # Para pruebas: Pre cargar modelos al iniciar la aplicación, para evitar que el primer request sea lento.
-        # from app.services.model_loader import ModelLoader
-        # ModelLoader.get_beto_model()
-        # ModelLoader.get_sbert_model()
+        # Pre cargar modelos al iniciar la aplicación, para evitar que el primer request sea lento.
+        from app.services.model_loader import ModelLoader
+        try:
+            logger.info("Pre-cargando modelo BETO CLS...")
+            ModelLoader.get_beto_cls()
+            logger.info("Pre-cargando modelo SBERT...")
+            ModelLoader.get_sbert()
+            logger.info("Pre-cargando modelo BETO NER...")
+            ModelLoader.get_beto_ner()
+            logger.info("Todos los modelos han sido cargados exitosamente.")
+        except Exception as e:
+            logger.error(f"Error durante la pre-carga de modelos: {e}")
 
     return app
 
