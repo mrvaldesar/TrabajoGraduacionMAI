@@ -1,0 +1,57 @@
+<div class="sap-page-header">
+  <h2 class="sap-title"><i class="bi bi-cpu-fill me-2"></i> Modelos de Inteligencia Artificial</h2>
+  <div class="sap-subtitle">
+    Metadatos técnicos y configuración de los modelos cargados en el sistema.
+  </div>
+</div>
+
+<div class="sap-content-container">
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="text-center p-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2 text-muted">Obteniendo información de los modelos...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="alert alert-danger d-flex align-items-center" role="alert">
+    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+    <div>{{ error }}</div>
+  </div>
+
+  <!-- Models Grid -->
+  <div *ngIf="!loading && !error" class="row">
+    <div class="col-12 col-xl-6 mb-4" *ngFor="let model of models">
+
+      <div class="card sap-card h-100">
+        <div class="card-header sap-card-header d-flex justify-content-between align-items-center">
+          <span class="fw-bold">{{ model.name }}</span>
+          <span class="badge bg-secondary">{{ model.type }}</span>
+        </div>
+
+        <div class="card-body">
+          <p class="card-text text-muted mb-3">{{ model.description }}</p>
+
+          <div class="mb-3">
+            <small class="text-secondary fw-bold">RUTA EN DISCO</small>
+            <div class="sap-code-block">{{ model.path }}</div>
+          </div>
+
+          <h6 class="sap-section-title">Metadatos Técnicos</h6>
+          <table class="table table-sm table-striped sap-table">
+            <tbody>
+              <tr *ngFor="let item of model.metadata | keyvalue">
+                <td class="fw-bold text-nowrap" style="width: 40%;">{{ formatKey(item.key) }}</td>
+                <td class="text-break">{{ formatValue(item.value) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

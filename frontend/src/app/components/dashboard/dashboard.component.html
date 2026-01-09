@@ -1,0 +1,60 @@
+<div class="sap-page-header">
+  <div class="d-flex justify-content-between align-items-center">
+    <div>
+        <h2 class="sap-title"><i class="bi bi-speedometer2 me-2"></i> Dashboard de Uso</h2>
+        <div class="sap-subtitle">
+            Estadísticas de uso basadas en el historial local del navegador.
+        </div>
+    </div>
+    <div class="text-end">
+        <button class="btn btn-sm btn-outline-secondary" (click)="refresh()">
+            <i class="bi bi-arrow-clockwise"></i> Actualizar
+        </button>
+        <div class="text-muted mt-1" style="font-size: 0.7rem;">
+            Total Operaciones: {{ totalOperations }}
+        </div>
+    </div>
+  </div>
+</div>
+
+<div class="sap-content-container">
+
+    <div class="row">
+        <!-- Pie Chart: Categorias -->
+        <div class="col-12 col-lg-6 mb-4">
+            <div class="card sap-card h-100">
+                <div class="card-header sap-card-header">
+                    <span class="fw-bold">Distribución de Categorías</span>
+                </div>
+                <div class="card-body" style="height: 300px; position: relative;">
+                     <canvas #pieChart></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bar Chart: Similitud -->
+        <div class="col-12 col-lg-6 mb-4">
+            <div class="card sap-card h-100">
+                <div class="card-header sap-card-header">
+                    <span class="fw-bold">Histograma de Similitud (0.0 - 1.0)</span>
+                </div>
+                <div class="card-body" style="height: 300px; position: relative;">
+                     <canvas #barChart></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Line Chart: Timeline -->
+        <div class="col-12 mb-4">
+            <div class="card sap-card h-100">
+                <div class="card-header sap-card-header">
+                    <span class="fw-bold">Actividad Reciente (Últimos 7 días)</span>
+                </div>
+                <div class="card-body" style="height: 300px; position: relative;">
+                     <canvas #lineChart></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

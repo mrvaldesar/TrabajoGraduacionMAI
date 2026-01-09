@@ -41,6 +41,17 @@ import { FileConversionService } from '../../services/file-conversion.service';
           <h4 class="alert-heading" style="font-size: 14px; font-weight: bold;">Resultado:</h4>
           <p class="mb-1"><strong>Categoría:</strong> {{ result.category }}</p>
           <p class="mb-0"><strong>Confianza:</strong> {{ (result.confidence * 100) | number:'1.2-2' }}%</p>
+
+          <hr *ngIf="metrics" style="border-top: 1px solid #999;">
+          <div *ngIf="metrics" style="font-size: 12px;">
+              <p class="mb-0"><strong>Tiempos de Ejecución:</strong></p>
+              <ul class="mb-0 ps-3">
+                  <li>Total (Cliente+Servidor): {{ metrics.total_time | number:'1.3-3' }} s</li>
+                  <li>Respuesta Servidor: {{ metrics.server_time | number:'1.3-3' }} s</li>
+                  <li>Inferencia Modelo: {{ metrics.inference_time | number:'1.4-4' }} s</li>
+                  <li>Anonimización: {{ metrics.anonymization_time | number:'1.4-4' }} s</li>
+              </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -54,6 +65,10 @@ export class ClassifyComponent {
   progress = 0;
   statusMessage = '';
 
+  // Metrics
+  metrics: any = null;
+  startTime = 0;
+
   constructor(
     private api: ApiService,
     private fileConversion: FileConversionService
@@ -65,6 +80,7 @@ export class ClassifyComponent {
     this.error = null;
     this.progress = 0;
     this.statusMessage = '';
+    this.metrics = null;
   }
 
   async upload() {
@@ -73,8 +89,10 @@ export class ClassifyComponent {
     this.loading = true;
     this.error = null;
     this.result = null;
+    this.metrics = null;
     this.progress = 5;
     this.statusMessage = 'Iniciando proceso...';
+    this.startTime = performance.now();
 
     try {
       this.statusMessage = 'Preparando archivo...';
@@ -90,9 +108,23 @@ export class ClassifyComponent {
 
       this.statusMessage = 'Enviando a modelo BETO...';
       this.progress = 60;
+      const serverStart = performance.now();
 
       this.api.classify(textFile).subscribe({
         next: (res) => {
+          const serverEnd = performance.now();
+          const totalEnd = performance.now();
+
+          const serverTime = (serverEnd - serverStart) / 1000;
+          const totalTime = (totalEnd - this.startTime) / 1000;
+
+          this.metrics = {
+              server_time: serverTime,
+              total_time: totalTime,
+              inference_time: res.inference_time,
+              anonymization_time: res.anonymization_time
+          };
+
           this.progress = 100;
           this.statusMessage = 'Completado';
           setTimeout(() => {
@@ -102,7 +134,8 @@ export class ClassifyComponent {
                   type: 'Clasificación',
                   file: this.selectedFile?.name,
                   result: res.category,
-                  timestamp: new Date()
+                  timestamp: new Date(),
+                  metrics: this.metrics
               });
           }, 500);
         },

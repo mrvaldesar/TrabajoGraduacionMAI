@@ -6,11 +6,15 @@ import { environment } from '../../environments/environment';
 export interface ClassificationResponse {
   category: string;
   confidence: number;
+  inference_time: number;
+  anonymization_time: number;
 }
 
 export interface SimilarityResponse {
   similarity: number;
   is_duplicate: boolean;
+  inference_time: number;
+  anonymization_time: number;
 }
 
 @Injectable({

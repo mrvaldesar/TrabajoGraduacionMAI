@@ -8,12 +8,16 @@ import { AppComponent } from './app.component';
 import { ClassifyComponent } from './components/classify/classify.component';
 import { SimilarityComponent } from './components/similarity/similarity.component';
 import { HistoryComponent } from './components/history/history.component';
+import { ModelsComponent } from './components/models/models.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 const routes: Routes = [
+  { path: 'dashboard', component: DashboardComponent },
   { path: 'classify', component: ClassifyComponent },
   { path: 'similarity', component: SimilarityComponent },
   { path: 'history', component: HistoryComponent },
-  { path: '', redirectTo: '/classify', pathMatch: 'full' }
+  { path: 'models', component: ModelsComponent },
+  { path: '', redirectTo: '/dashboard', pathMatch: 'full' }
 ];
 
 @NgModule({
@@ -21,7 +25,9 @@ const routes: Routes = [
     AppComponent,
     ClassifyComponent,
     SimilarityComponent,
-    HistoryComponent
+    HistoryComponent,
+    ModelsComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,

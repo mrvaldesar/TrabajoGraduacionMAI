@@ -1,0 +1,67 @@
+.sap-page-header {
+  background-color: #f0f3f5;
+  border-bottom: 1px solid #d1d4d6;
+  padding: 15px 20px;
+  margin-bottom: 20px;
+}
+
+.sap-title {
+  font-size: 1.25rem;
+  color: #333;
+  font-weight: 600;
+  margin: 0;
+}
+
+.sap-subtitle {
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 5px;
+}
+
+.sap-content-container {
+  padding: 0 20px 20px 20px;
+}
+
+.sap-card {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.sap-card-header {
+  background: linear-gradient(to bottom, #eff4f9 0%, #dbe4ed 100%);
+  border-bottom: 1px solid #b6b6b6;
+  padding: 10px 15px;
+  font-size: 0.95rem;
+  color: #444;
+}
+
+.sap-code-block {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 3px;
+  padding: 6px 10px;
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 0.8rem;
+  color: #d63384;
+  word-break: break-all;
+}
+
+.sap-section-title {
+  color: #5d9cec;
+  border-bottom: 2px solid #5d9cec;
+  padding-bottom: 5px;
+  margin-top: 15px;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.sap-table {
+  font-size: 0.85rem;
+}
+
+.sap-table td {
+  vertical-align: middle;
+}
