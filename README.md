@@ -4,13 +4,12 @@ Este repositorio contiene los scripts y recursos del trabajo de graduación titu
 
 El proyecto busca **cerrar la brecha entre los avances académicos en Procesamiento del Lenguaje Natural (PLN) y su aplicación práctica en empresas guatemaltecas**, mediante la validación de modelos de lenguaje contextualizados (como BETO y Sentence-BERT) con documentos reales en español guatemalteco.
 
-> 📌 **Nota**: Este repositorio incluye únicamente los componentes de preparación y procesamiento de datos. La API REST, el frontend y los modelos entrenados se gestionan en fases posteriores del desarrollo.
-
 ## Estructura del repositorio
 ```text
 ├── notebook/
-│ ├── 0_eda.ipynb # Análisis exploratorio realizado
-│ └── pln_clasificacion_duplicados_empresariales.ipynb # Anonimización de archivos y finetunning de modelos
+│ ├── pln_eda.ipynb # Análisis exploratorio realizado
+│ ├── pln_clasificacion_duplicados_empresariales.ipynb # Anonimización de archivos y finetunning de modelos
+│ └── pln_inferencia.ipynb # Carga de modelos, pruebas de inferencia
 │
 ├── scripts/
 │ ├── descargar_adjuntos.py # Descarga archivos adjuntos de correos corporativos
@@ -65,8 +64,7 @@ Estos datos servirán como base para:
 4. En la carpeta backend y frontend están las instrucciones correspondientes (README.md)
 
 ## Próximos pasos
-- Mejorar manejo de volumenes docker para evitar descargar constantemente los modelos
-- Preparar frontend
+- Mejorar apariencia de interfaz gráfica (demo)
 - Contenerizar y aplicar docker-compose.yml
 
 ## Licencia
