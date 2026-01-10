@@ -83,8 +83,8 @@ def compare_documents(file1: UploadFile = File(...), file2: UploadFile = File(..
         t3 = time.perf_counter()
         inf_time = t3 - t2
 
-        # Lógica de duplicidad: is_duplicate = true si similarity >= 0.90
-        is_dup = score >= 0.90
+        # Lógica de duplicidad: is_duplicate = true si similarity >= 0.85
+        is_dup = score >= 0.85
 
         return SimilarityResponse(
             similarity=score,
