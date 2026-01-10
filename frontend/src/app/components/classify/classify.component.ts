@@ -19,9 +19,18 @@ import { FileConversionService } from '../../services/file-conversion.service';
 
         <div class="sap-form-row">
             <div class="sap-label"></div> <!-- Spacer for alignment -->
-            <button class="sap-btn sap-btn-primary" (click)="upload()" [disabled]="!selectedFile || loading">
-              {{ loading ? 'Procesando...' : 'Clasificar' }}
-            </button>
+            <div style="display: flex; gap: 10px;">
+                <button class="sap-btn sap-btn-primary" (click)="upload()" [disabled]="!selectedFile || loading">
+                  {{ loading ? 'Procesando...' : 'Clasificar' }}
+                </button>
+                <button *ngIf="extractedText" class="sap-btn" style="background-color: #6c757d; color: white;" (click)="showExtractedText = !showExtractedText">
+                  {{ showExtractedText ? 'Ocultar Texto' : 'Ver Texto Extraído' }}
+                </button>
+            </div>
+        </div>
+
+        <div *ngIf="showExtractedText && extractedText" class="mt-3 p-2" style="background: #f0f0f0; border: 1px solid #ccc; max-height: 200px; overflow-y: auto;">
+             <pre style="white-space: pre-wrap; font-family: monospace; font-size: 12px; margin: 0;">{{ extractedText }}</pre>
         </div>
 
         <div *ngIf="loading" class="mt-3">
@@ -65,6 +74,9 @@ export class ClassifyComponent {
   progress = 0;
   statusMessage = '';
 
+  extractedText: string | null = null;
+  showExtractedText = false;
+
   // Metrics
   metrics: any = null;
   startTime = 0;
@@ -81,6 +93,8 @@ export class ClassifyComponent {
     this.progress = 0;
     this.statusMessage = '';
     this.metrics = null;
+    this.extractedText = null;
+    this.showExtractedText = false;
   }
 
   async upload() {
@@ -105,6 +119,7 @@ export class ClassifyComponent {
       };
 
       const textFile = await this.fileConversion.convertToTxtFile(this.selectedFile, onProgress);
+      this.extractedText = await textFile.text();
 
       this.statusMessage = 'Enviando a modelo BETO...';
       this.progress = 60;

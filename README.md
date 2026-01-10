@@ -42,8 +42,8 @@ El proyecto busca **cerrar la brecha entre los avances académicos en Procesamie
 |               | API Requests (JSON)                   |
 |               v                                       |
 |   +-----------------------+       +---------------+   |
-|   |   Backend Service     |<----->| Volúmenes     |   |
-|   | (FastAPI + PyTorch)   |       | (Modelos ML)  |   |
+|   |   Backend Service     |<----->| 			    |   |
+|   | (FastAPI + PyTorch)   |       |   Modelos ML  |   |
 |   +-----------------------+       +---------------+   |
 |                                                       |
 +-------------------------------------------------------+
@@ -88,9 +88,6 @@ Estos datos servirán como base para:
    ```
 3. Los documentos procesados se guardarán en las carpetas correspondientes (correos_pdf/, extracted_files/, etc.), listos para su uso en el pipeline de PLN.
 4. En la carpeta backend y frontend están las instrucciones correspondientes (README.md)
-
-## Próximos pasos
-- Trabajar en los scripts y notebooks para la Evaluación de los casos de pruebas.
 
 ## Licencia
 Este proyecto tiene fines académicos y de investigación. El código está disponible bajo la licencia MIT.

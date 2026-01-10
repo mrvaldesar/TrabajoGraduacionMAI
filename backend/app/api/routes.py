@@ -46,6 +46,8 @@ def classify_document(file: UploadFile = File(...)):
             anonymization_time=anon_time
         )
 
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE, detail=str(e))
     except HTTPException as e:
         raise e
     except Exception as e:
@@ -83,7 +85,7 @@ def compare_documents(file1: UploadFile = File(...), file2: UploadFile = File(..
         t3 = time.perf_counter()
         inf_time = t3 - t2
 
-        # Lógica de duplicidad: is_duplicate = true si similarity >= 0.85
+        # Lógica de duplicidad: is_duplicate = true si similarity >= 0.90
         is_dup = score >= 0.85
 
         return SimilarityResponse(
@@ -93,6 +95,8 @@ def compare_documents(file1: UploadFile = File(...), file2: UploadFile = File(..
             anonymization_time=anon_time
         )
 
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE, detail=str(e))
     except HTTPException as e:
         raise e
     except Exception as e:

@@ -18,11 +18,23 @@ import { FileConversionService } from '../../services/file-conversion.service';
                 <label class="sap-label">Archivo 1</label>
                 <input class="sap-input" type="file" (change)="onFile1Selected($event)">
              </div>
+             <button *ngIf="extractedText1" class="sap-btn mt-2" style="background-color: #6c757d; color: white;" (click)="showExtractedText1 = !showExtractedText1">
+                  {{ showExtractedText1 ? 'Ocultar Texto 1' : 'Ver Texto Extraído 1' }}
+             </button>
+             <div *ngIf="showExtractedText1 && extractedText1" class="mt-2 p-2" style="background: #f0f0f0; border: 1px solid #ccc; max-height: 200px; overflow-y: auto;">
+                <pre style="white-space: pre-wrap; font-family: monospace; font-size: 12px; margin: 0;">{{ extractedText1 }}</pre>
+             </div>
           </div>
           <div class="col-md-6 mb-3">
              <div class="sap-form-row">
                 <label class="sap-label">Archivo 2</label>
                 <input class="sap-input" type="file" (change)="onFile2Selected($event)">
+             </div>
+             <button *ngIf="extractedText2" class="sap-btn mt-2" style="background-color: #6c757d; color: white;" (click)="showExtractedText2 = !showExtractedText2">
+                  {{ showExtractedText2 ? 'Ocultar Texto 2' : 'Ver Texto Extraído 2' }}
+             </button>
+             <div *ngIf="showExtractedText2 && extractedText2" class="mt-2 p-2" style="background: #f0f0f0; border: 1px solid #ccc; max-height: 200px; overflow-y: auto;">
+                <pre style="white-space: pre-wrap; font-family: monospace; font-size: 12px; margin: 0;">{{ extractedText2 }}</pre>
              </div>
           </div>
         </div>
@@ -79,6 +91,11 @@ export class SimilarityComponent {
   progress = 0;
   statusMessage = '';
 
+  extractedText1: string | null = null;
+  extractedText2: string | null = null;
+  showExtractedText1 = false;
+  showExtractedText2 = false;
+
   // Metrics
   metrics: any = null;
   startTime = 0;
@@ -88,8 +105,20 @@ export class SimilarityComponent {
     private fileConversion: FileConversionService
   ) {}
 
-  onFile1Selected(event: any) { this.file1 = event.target.files[0]; this.result = null; this.metrics = null; }
-  onFile2Selected(event: any) { this.file2 = event.target.files[0]; this.result = null; this.metrics = null; }
+  onFile1Selected(event: any) {
+    this.file1 = event.target.files[0];
+    this.result = null;
+    this.metrics = null;
+    this.extractedText1 = null;
+    this.showExtractedText1 = false;
+  }
+  onFile2Selected(event: any) {
+    this.file2 = event.target.files[0];
+    this.result = null;
+    this.metrics = null;
+    this.extractedText2 = null;
+    this.showExtractedText2 = false;
+  }
 
   async compare() {
     if (!this.file1 || !this.file2) return;
@@ -111,6 +140,7 @@ export class SimilarityComponent {
             this.progress = Math.floor(percentage * 0.4);
         };
         const textFile1 = await this.fileConversion.convertToTxtFile(this.file1, onProgress1);
+        this.extractedText1 = await textFile1.text();
 
         // Convert File 2
         this.statusMessage = `Procesando archivo 2 (${this.file2.name})...`;
@@ -120,6 +150,7 @@ export class SimilarityComponent {
             this.progress = 40 + Math.floor(percentage * 0.4);
         };
         const textFile2 = await this.fileConversion.convertToTxtFile(this.file2, onProgress2);
+        this.extractedText2 = await textFile2.text();
 
         // Send to API
         this.statusMessage = 'Comparando documentos...';
