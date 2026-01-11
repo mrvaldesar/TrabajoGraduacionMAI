@@ -18,7 +18,7 @@ import { FileConversionService } from '../../services/file-conversion.service';
                 <label class="sap-label">Archivo 1</label>
                 <input class="sap-input" type="file" (change)="onFile1Selected($event)">
              </div>
-             <button *ngIf="extractedText1" class="sap-btn mt-2" style="background-color: #6c757d; color: white;" (click)="showExtractedText1 = !showExtractedText1">
+             <button *ngIf="extractedText1" class="sap-btn sap-btn-secondary mt-2" (click)="showExtractedText1 = !showExtractedText1">
                   {{ showExtractedText1 ? 'Ocultar Texto 1' : 'Ver Texto Extraído 1' }}
              </button>
              <div *ngIf="showExtractedText1 && extractedText1" class="mt-2 p-2" style="background: #f0f0f0; border: 1px solid #ccc; max-height: 200px; overflow-y: auto;">
@@ -30,7 +30,7 @@ import { FileConversionService } from '../../services/file-conversion.service';
                 <label class="sap-label">Archivo 2</label>
                 <input class="sap-input" type="file" (change)="onFile2Selected($event)">
              </div>
-             <button *ngIf="extractedText2" class="sap-btn mt-2" style="background-color: #6c757d; color: white;" (click)="showExtractedText2 = !showExtractedText2">
+             <button *ngIf="extractedText2" class="sap-btn sap-btn-secondary mt-2" (click)="showExtractedText2 = !showExtractedText2">
                   {{ showExtractedText2 ? 'Ocultar Texto 2' : 'Ver Texto Extraído 2' }}
              </button>
              <div *ngIf="showExtractedText2 && extractedText2" class="mt-2 p-2" style="background: #f0f0f0; border: 1px solid #ccc; max-height: 200px; overflow-y: auto;">

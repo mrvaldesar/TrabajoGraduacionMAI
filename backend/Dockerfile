@@ -30,6 +30,7 @@ RUN python -c "from transformers import AutoTokenizer, AutoModelForTokenClassifi
 
 # --- Copiar el código de la app ---
 COPY app ./app
+COPY models /models
 
 EXPOSE 8000
 

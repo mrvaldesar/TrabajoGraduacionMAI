@@ -23,7 +23,7 @@ import { FileConversionService } from '../../services/file-conversion.service';
                 <button class="sap-btn sap-btn-primary" (click)="upload()" [disabled]="!selectedFile || loading">
                   {{ loading ? 'Procesando...' : 'Clasificar' }}
                 </button>
-                <button *ngIf="extractedText" class="sap-btn" style="background-color: #6c757d; color: white;" (click)="showExtractedText = !showExtractedText">
+                <button *ngIf="extractedText" class="sap-btn sap-btn-secondary" (click)="showExtractedText = !showExtractedText">
                   {{ showExtractedText ? 'Ocultar Texto' : 'Ver Texto Extraído' }}
                 </button>
             </div>
