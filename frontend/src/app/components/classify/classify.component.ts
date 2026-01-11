@@ -150,7 +150,8 @@ export class ClassifyComponent {
                   file: this.selectedFile?.name,
                   result: res.category,
                   timestamp: new Date(),
-                  metrics: this.metrics
+                  metrics: this.metrics,
+                  anonymized_text: res.anonymized_text
               });
           }, 500);
         },

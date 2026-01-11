@@ -1,4 +1,4 @@
-/* SAP Business One Classic Style */
+/* System Classic Style */
 body {
     background-color: #f0f0f0;
     font-family: Tahoma, Arial, sans-serif; /* Standard desktop font */
@@ -6,7 +6,7 @@ body {
     overflow-x: hidden;
 }
 
-/* SAP Layout */
+/* Layout */
 .sap-wrapper {
     display: flex;
     flex-direction: column;
@@ -14,7 +14,7 @@ body {
 }
 
 .sap-header {
-    background: linear-gradient(to bottom, #5d87a1 0%, #406078 100%); /* Classic SAP Blue Gradient */
+    background: linear-gradient(to bottom, #5d87a1 0%, #406078 100%); /* Classic Blue Gradient */
     color: white;
     height: 40px;
     display: flex;
@@ -68,15 +68,15 @@ body {
 }
 
 .sap-menu-item.active {
-    background-color: #ffe6a0; /* SAP Gold Selection */
+    background-color: #ffe6a0; /* Gold Selection */
     border: 1px solid #dcb45c;
     color: #000;
     font-weight: bold;
 }
 
-/* SAP Window/Form Style */
+/* Window/Form Style */
 .sap-window {
-    background-color: #ece9d8; /* Classic Windows/SAP beige-grey */
+    background-color: #ece9d8; /* Classic beige-grey */
     border: 1px solid #0050ef; /* Active window border color typically blue */
     box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
     margin-bottom: 20px;
@@ -151,8 +151,20 @@ body {
 }
 
 .sap-btn-primary {
-    /* Sometimes SAP uses default styling, but let's give it a slight emphasis */
+    /* Sometimes uses default styling, but let's give it a slight emphasis */
     font-weight: bold;
+}
+
+.sap-btn-secondary {
+    background: linear-gradient(to bottom, #ffe6a0 0%, #dcb45c 100%); /* Gold/Yellow style */
+    border: 1px solid #c29a3e;
+    color: #000; /* Black text for high contrast */
+    font-weight: normal;
+}
+
+.sap-btn-secondary:hover {
+    background: linear-gradient(to bottom, #fff0c0 0%, #e6c575 100%);
+    border-color: #a8852d;
 }
 
 /* History Grid / Matrix Style */

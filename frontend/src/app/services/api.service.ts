@@ -8,6 +8,7 @@ export interface ClassificationResponse {
   confidence: number;
   inference_time: number;
   anonymization_time: number;
+  anonymized_text: string;
 }
 
 export interface SimilarityResponse {
@@ -15,6 +16,8 @@ export interface SimilarityResponse {
   is_duplicate: boolean;
   inference_time: number;
   anonymization_time: number;
+  anonymized_text_1: string;
+  anonymized_text_2: string;
 }
 
 @Injectable({

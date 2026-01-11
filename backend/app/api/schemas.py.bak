@@ -5,15 +5,12 @@ class ClassificationResponse(BaseModel):
     confidence: float
     inference_time: float
     anonymization_time: float
-    anonymized_text: str
 
 class SimilarityResponse(BaseModel):
     similarity: float
     is_duplicate: bool
     inference_time: float
     anonymization_time: float
-    anonymized_text_1: str
-    anonymized_text_2: str
 
 class ErrorResponse(BaseModel):
     detail: str

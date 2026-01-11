@@ -20,6 +20,7 @@ import { Component, OnInit } from '@angular/core';
                     <th>Tipo</th>
                     <th>Archivo(s)</th>
                     <th>Resultado</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -29,6 +30,11 @@ import { Component, OnInit } from '@angular/core';
                     <td>{{ item.type }}</td>
                     <td>{{ item.file }}</td>
                     <td>{{ item.result }}</td>
+                    <td>
+                        <button *ngIf="item.anonymized_text" class="sap-btn sap-btn-secondary" style="font-size: 11px; padding: 2px 8px;" (click)="downloadText(item.file, item.anonymized_text)">
+                            Descargar Anonimizado
+                        </button>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -56,5 +62,19 @@ export class HistoryComponent implements OnInit {
   clear() {
     localStorage.removeItem('nlp_history');
     this.history = [];
+  }
+
+  downloadText(filename: string, text: string) {
+      // Clean filename
+      const cleanName = filename.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+      const finalName = `anonymized_${cleanName}.txt`;
+
+      const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = finalName;
+      a.click();
+      window.URL.revokeObjectURL(url);
   }
 }

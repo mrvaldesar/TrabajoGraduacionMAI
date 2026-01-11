@@ -182,7 +182,8 @@ export class SimilarityComponent {
                     file: `${this.file1?.name} vs ${this.file2?.name}`,
                     result: `Score: ${res.similarity.toFixed(4)}`,
                     timestamp: new Date(),
-                    metrics: this.metrics
+                    metrics: this.metrics,
+                    anonymized_text: `Archivo 1: ${this.file1?.name}\n====================\n${res.anonymized_text_1}\n\nArchivo 2: ${this.file2?.name}\n====================\n${res.anonymized_text_2}`
                 });
             }, 500);
           },

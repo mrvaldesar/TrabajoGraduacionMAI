@@ -6,6 +6,8 @@ ENV PYTHONUNBUFFERED=1
 ENV HF_HOME=/model_cache
 ENV TRANSFORMERS_CACHE=/model_cache
 ENV HF_HUB_DISABLE_TELEMETRY=1
+ENV BETO_CLS_PATH=/models/beto_finetuned
+ENV SBERT_PATH=/models/sbert
 
 WORKDIR /app
 
