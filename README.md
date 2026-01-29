@@ -42,7 +42,7 @@ El proyecto busca **cerrar la brecha entre los avances académicos en Procesamie
 |               | API Requests (JSON)                   |
 |               v                                       |
 |   +-----------------------+       +---------------+   |
-|   |   Backend Service     |<----->| 			    |   |
+|   |   Backend Service     |<----->| 		        |
 |   | (FastAPI + PyTorch)   |       |   Modelos ML  |   |
 |   +-----------------------+       +---------------+   |
 |                                                       |

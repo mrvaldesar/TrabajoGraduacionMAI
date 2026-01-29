@@ -40,11 +40,25 @@
           </div>
 
           <h6 class="sap-section-title">Metadatos Técnicos</h6>
+
+          <!-- Manejo para las etiquetas (labels del modelo) -->
+          <div *ngIf="model.metadata['labels']" class="mb-3">
+              <span class="fw-bold d-block mb-1" style="font-size: 0.85rem;">ETIQUETAS / CLASES:</span>
+              <div class="d-flex flex-wrap gap-1">
+                  <span *ngFor="let label of getLabels(model.metadata['labels'])" class="badge bg-info text-dark border border-info">
+                      {{ label }}
+                  </span>
+              </div>
+          </div>
+
           <table class="table table-sm table-striped sap-table">
             <tbody>
               <tr *ngFor="let item of model.metadata | keyvalue">
-                <td class="fw-bold text-nowrap" style="width: 40%;">{{ formatKey(item.key) }}</td>
-                <td class="text-break">{{ formatValue(item.value) }}</td>
+                <!-- Skip labels in the generic table since we displayed them above -->
+                <ng-container *ngIf="item.key !== 'labels'">
+                    <td class="fw-bold text-nowrap" style="width: 40%;">{{ formatKey(item.key) }}</td>
+                    <td class="text-break">{{ formatValue(item.value) }}</td>
+                </ng-container>
               </tr>
             </tbody>
           </table>

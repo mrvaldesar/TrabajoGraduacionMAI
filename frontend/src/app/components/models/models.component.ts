@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 interface ModelMetadata {
   name: string;
@@ -27,7 +28,7 @@ export class ModelsComponent implements OnInit {
 
   fetchModels(): void {
     this.loading = true;
-    this.http.get<{ models: ModelMetadata[] }>('/api/v1/models').subscribe({
+    this.http.get<{ models: ModelMetadata[] }>(`${environment.apiUrl}/models`).subscribe({
       next: (response) => {
         this.models = response.models;
         this.loading = false;
@@ -51,5 +52,12 @@ export class ModelsComponent implements OnInit {
       return JSON.stringify(value, null, 2);
     }
     return String(value);
+  }
+
+  getLabels(value: any): string[] {
+      if (Array.isArray(value)) {
+          return value;
+      }
+      return [];
   }
 }
