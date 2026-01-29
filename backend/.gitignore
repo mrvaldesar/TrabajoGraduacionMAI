@@ -10,7 +10,3 @@ __pycache__/
 .venv
 env/
 venv/
-
-# 🔥 Modelos y cache (ML)
-models/
-model_cache/
