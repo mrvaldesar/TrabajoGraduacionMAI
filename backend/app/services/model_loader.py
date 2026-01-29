@@ -90,7 +90,6 @@ class ModelLoader:
         cls._sbert = SentenceTransformer(
             str(path),
             local_files_only=True,
-            tokenizer_kwargs={"fix_mistral_regex": True},
         )
 
 
@@ -119,7 +118,8 @@ class ModelLoader:
                     "num_hidden_layers": cfg.num_hidden_layers,
                     "num_attention_heads": cfg.num_attention_heads,
                     "max_position_embeddings": cfg.max_position_embeddings,
-                    "num_labels": len(cfg.id2label) if hasattr(cfg, 'id2label') and cfg.id2label else "Unknown",
+                    "num_labels": len(getattr(cfg, 'id2label', {})) if getattr(cfg, 'id2label', None) else "Unknown",
+                    "labels": list(getattr(cfg, 'id2label', {}).values()) if getattr(cfg, 'id2label', None) else [],
                     "model_type": cfg.model_type
                 }
             }

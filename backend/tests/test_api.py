@@ -41,6 +41,8 @@ def test_classify_endpoint_txt():
     assert isinstance(data["category"], str)
     assert "confidence" in data
     assert isinstance(data["confidence"], float)
+    assert "anonymized_text" in data
+    assert isinstance(data["anonymized_text"], str)
 
 def test_similarity_endpoint_txt():
     files = [
@@ -58,6 +60,10 @@ def test_similarity_endpoint_txt():
     assert 0.0 <= data["similarity"] <= 1.0
     assert "is_duplicate" in data
     assert isinstance(data["is_duplicate"], bool)
+    assert "anonymized_text_1" in data
+    assert "anonymized_text_2" in data
+    assert isinstance(data["anonymized_text_1"], str)
+    assert isinstance(data["anonymized_text_2"], str)
 
 def test_similarity_is_duplicate_logic():
     text = b"Texto identico para prueba de duplicidad."
@@ -82,7 +88,7 @@ def test_classify_endpoint_pdf_fail():
     file_name = "test.pdf"
     files = {"file": (file_name, b"%PDF-1.4...", "application/pdf")}
     response = client.post("/api/v1/classify", files=files)
-    assert response.status_code == 500
+    assert response.status_code == 415
     data = response.json()
     assert "Tipo de archivo no soportado" in data["detail"]
 
@@ -94,6 +100,6 @@ def test_classify_endpoint_docx_fail():
 
     response = client.post("/api/v1/classify", files=files)
 
-    assert response.status_code == 500
+    assert response.status_code == 415
     data = response.json()
     assert "Tipo de archivo no soportado" in data["detail"]

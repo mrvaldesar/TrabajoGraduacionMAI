@@ -11,6 +11,26 @@ logger = logging.getLogger(__name__)
 def create_app() -> FastAPI:
     app = FastAPI(
         title=settings.PROJECT_NAME,
+        description="""
+        API REST para el **Proyecto de Graduación** de clasificación y análisis de documentos.
+
+        ## Funcionalidades Principales
+        *   **Clasificación Automática**: Categorización de documentos usando BETO (Spanish BERT).
+        *   **Similitud Semántica**: Detección de duplicados y comparación de textos con S-BERT.
+        *   **Privacidad**: Anonimización automática de datos sensibles antes del procesamiento.
+
+        ## Tecnologías
+        *   FastAPI (Python)
+        *   PyTorch & Transformers
+        """,
+        version="1.0.0",
+        contact={
+            "name": "Equipo de Desarrollo - Trabajo de Graduación",
+            "email": "contacto@example.com",
+        },
+        license_info={
+            "name": "MIT License",
+        },
         openapi_url=f"{settings.API_V1_STR}/openapi.json"
     )
 

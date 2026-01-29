@@ -12,14 +12,26 @@ import time
 router = APIRouter()
 logger = logging.getLogger(__name__)
 
-@router.post("/classify", response_model=ClassificationResponse)
-def classify_document(file: UploadFile = File(...)):
-    """
-    Endpoint para clasificar un documento.
-    1. Lee el archivo (solo TXT).
-    2. Anonimiza el contenido.
-    3. Pasa el texto anonimizado al modelo BETO.
-    """
+@router.post(
+    "/classify",
+    response_model=ClassificationResponse,
+    tags=["NLP Operations"],
+    summary="Clasificar Documento",
+    description="""
+    Recibe un archivo de texto (`.txt`), lo procesa y determina a qué categoría pertenece.
+
+    **Flujo de Proceso:**
+    1. **Extracción**: Lee el contenido del archivo.
+    2. **Anonimización**: Detecta y ofusca entidades sensibles (nombres, fechas, etc.) usando NER.
+    3. **Inferencia**: Utiliza un modelo **BETO** fine-tuned para predecir la categoría.
+    """,
+    responses={
+        400: {"model": ErrorResponse, "description": "Archivo vacío o sin texto legible."},
+        415: {"model": ErrorResponse, "description": "Tipo de archivo no soportado (debe ser .txt)."},
+        500: {"model": ErrorResponse, "description": "Error interno del servidor durante el procesamiento."}
+    }
+)
+def classify_document(file: UploadFile = File(..., description="Archivo de texto a clasificar (.txt)")):
     try:
         content = file.file.read()
         text = FileParser.extract_text(content, file.filename)
@@ -55,14 +67,31 @@ def classify_document(file: UploadFile = File(...)):
         logger.error(f"Error en clasificación: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.post("/similarity", response_model=SimilarityResponse)
-def compare_documents(file1: UploadFile = File(...), file2: UploadFile = File(...)):
-    """
-    Endpoint para calcular similitud semántica entre dos documentos.
-    1. Lee ambos archivos.
-    2. Anonimiza ambos textos.
-    3. Calcula similitud con S-BERT.
-    """
+@router.post(
+    "/similarity",
+    response_model=SimilarityResponse,
+    tags=["NLP Operations"],
+    summary="Comparar Documentos (Similitud)",
+    description="""
+    Compara dos archivos de texto para calcular su similitud semántica y detectar posibles duplicados.
+
+    **Flujo de Proceso:**
+    1. **Extracción**: Lee el contenido de ambos archivos.
+    2. **Anonimización**: Ofusca entidades sensibles en ambos textos.
+    3. **Inferencia**: Genera embeddings con **S-BERT** y calcula la similitud del coseno.
+
+    *Nota: Se considera duplicado si la similitud es >= 0.85.*
+    """,
+    responses={
+        400: {"model": ErrorResponse, "description": "Uno o ambos archivos no contienen texto válido."},
+        415: {"model": ErrorResponse, "description": "Tipo de archivo no soportado (debe ser .txt)."},
+        500: {"model": ErrorResponse, "description": "Error interno del servidor."}
+    }
+)
+def compare_documents(
+    file1: UploadFile = File(..., description="Primer archivo de texto (.txt)"),
+    file2: UploadFile = File(..., description="Segundo archivo de texto (.txt)")
+):
     try:
         content1 = file1.file.read()
         content2 = file2.file.read()
@@ -106,7 +135,16 @@ def compare_documents(file1: UploadFile = File(...), file2: UploadFile = File(..
         logger.error(f"Error en similitud: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/models", response_model=ModelsResponse)
+@router.get(
+    "/models",
+    response_model=ModelsResponse,
+    tags=["System Info"],
+    summary="Información de Modelos",
+    description="Devuelve metadatos técnicos sobre los modelos de IA cargados actualmente en la memoria del servidor.",
+    responses={
+        500: {"model": ErrorResponse, "description": "Error al recuperar metadatos de los modelos."}
+    }
+)
 def get_models_info():
     """
     Endpoint para obtener metadatos de los modelos cargados.
