@@ -4,12 +4,12 @@ from typing import List, Dict, Any
 class ClassificationResponse(BaseModel):
     category: str = Field(
         ...,
-        description="Categoría predicha para el documento.",
+        description="Categoria predicha para el documento.",
         examples=["Contratos"]
     )
     confidence: float = Field(
         ...,
-        description="Nivel de confianza de la predicción (0.0 a 1.0).",
+        description="Nivel de confianza de la prediccion (0.0 a 1.0).",
         examples=[0.98]
     )
     inference_time: float = Field(
@@ -24,14 +24,14 @@ class ClassificationResponse(BaseModel):
     )
     anonymized_text: str = Field(
         ...,
-        description="Texto extraído y anonimizado utilizado para la clasificación.",
+        description="Texto extraido y anonimizado utilizado para la clasificacion.",
         examples=["El presente contrato de servicios..."]
     )
 
 class SimilarityResponse(BaseModel):
     similarity: float = Field(
         ...,
-        description="Puntuación de similitud semántica (0.0 a 1.0).",
+        description="Puntuacion de similitud semantica (0.0 a 1.0).",
         examples=[0.95]
     )
     is_duplicate: bool = Field(
@@ -46,7 +46,7 @@ class SimilarityResponse(BaseModel):
     )
     anonymization_time: float = Field(
         ...,
-        description="Tiempo total de anonimización para ambos documentos (segundos).",
+        description="Tiempo total de anonimizacion para ambos documentos (segundos).",
         examples=[0.08]
     )
     anonymized_text_1: str = Field(
@@ -63,16 +63,16 @@ class SimilarityResponse(BaseModel):
 class ErrorResponse(BaseModel):
     detail: str = Field(
         ...,
-        description="Descripción detallada del error.",
-        examples=["El archivo está vacío o no es un formato válido."]
+        description="Descripcion detallada del error.",
+        examples=["El archivo esta vacio o no es un formato valido."]
     )
 
 class ModelMetadata(BaseModel):
     name: str = Field(..., description="Nombre identificador del modelo.", examples=["BETO Classification"])
     type: str = Field(..., description="Tipo de tarea del modelo.", examples=["classification"])
-    description: str = Field(..., description="Descripción funcional del modelo.")
+    description: str = Field(..., description="Descripcion funcional del modelo.")
     path: str = Field(..., description="Ruta local o identificador del modelo.")
-    metadata: Dict[str, Any] = Field(..., description="Metadatos técnicos adicionales (vocabulario, arquitectura, labels).")
+    metadata: Dict[str, Any] = Field(..., description="Metadatos tecnicos adicionales (vocabulario, arquitectura, labels).")
 
 class ModelsResponse(BaseModel):
     models: List[ModelMetadata] = Field(..., description="Lista de modelos cargados en el sistema.")
